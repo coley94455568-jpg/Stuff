@@ -6,7 +6,6 @@ from .config import (
     CORE_SUBJECTS,
     COMMON_SUBJECTS,
     OPTION_SUBJECTS,
-    OPTION_SUBJECT_LIMIT,
     SCHOOL_PERIODS,
     PERIOD_ORDER,
     TEACHING_PERIODS,
@@ -95,12 +94,6 @@ def make_app():
             )
             return
 
-        if subject_is_option(name) and option_subject_count(data) >= OPTION_SUBJECT_LIMIT:
-            messagebox.showwarning(
-                "Option limit reached",
-                f"You can only add up to {OPTION_SUBJECT_LIMIT} option subjects.",
-            )
-            return
 
         data["subjects"][name] = {"score": score, "history": [score]}
         save_data(data)
@@ -296,8 +289,7 @@ def make_app():
     options_tab = ttk.Frame(notebook, padding=12)
     notebook.add(options_tab, text="Option Subjects")
 
-    option_intro = ttk.Label(options_tab, text=f"Choose up to {OPTION_SUBJECT_LIMIT} option subjects.")
-    option_intro.pack(anchor="w", pady=(0, 10))
+    
 
     option_subject_vars = {}
     option_subject_frame = ttk.Frame(options_tab)
@@ -356,12 +348,6 @@ def toggle_option_subject(data, subject_name, selected, refresh_subjects):
     current = data.get("option_subjects", [])
 
     if selected:
-        if len(current) >= OPTION_SUBJECT_LIMIT:
-            messagebox.showwarning(
-                "Option limit reached",
-                f"You can only choose up to {OPTION_SUBJECT_LIMIT} option subjects.",
-            )
-            return False
 
         if subject_name not in current:
             current.append(subject_name)
